@@ -1,34 +1,26 @@
-from flask import Flask, request
-from db import saving_plans, monthly_savings
-import uuid
+from flask import Flask
+from flask_smorest import Api
+
+from resources.monthly_savings import blp as MonthlySavinsgBlueprint
+from resources.saving_plan import blp as SavingPlansBlueprint
 
 app = Flask(__name__)
 
-@app.route("/saving_plans", methods=['GET'])
-def get_saving_plans():
-    return {"saving_plans": list(saving_plans.values())}
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config["API_TITLE"] = "Finance app API"
+app.config["API_VERSION"] = "v1"
+app.config["OPENAPI_VERSION"] = "3.0.3"
+app.config["OPENAPI_URL_PREFIX"] = "/"
+app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
+app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
-@app.route("/saving_plan", methods=['POST'])
-def create_saving_plan():
-    saving_plan_data = request.get_json()
 
-    new_saving_plan_id = uuid.uuid4().hex
+api = Api(app)
 
-    new_saving_plan = {**saving_plan_data, "id": new_saving_plan_id}
+api.register_blueprint(MonthlySavinsgBlueprint)
+api.register_blueprint(SavingPlansBlueprint)
 
-    saving_plans[new_saving_plan_id] = new_saving_plan
+# DEV: docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-api-flask-smorest
+# PRODUCTION: docker run -dp 5000:5000 finance-api-flask-smorest
+   
 
-    return new_saving_plan, 201
-
-@app.route("/savings", methods=['POST'])
-def add_new_month_savings():
-    savings_data = request.get_json()
-    
-    if savings_data['saving_plan_id'] not in saving_plans:
-        return {"message": "Saving plan not found"}, 404
-    
-    new_savings_id = uuid.uuid4().hex
-    new_month_savings = {**savings_data, "id": new_savings_id}
-    monthly_savings[new_savings_id] = new_month_savings
-        
-    return new_month_savings, 201
