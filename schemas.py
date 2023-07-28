@@ -3,11 +3,12 @@ from marshmallow import Schema, fields
 # -----------------------------Monthly Savings
 class MonthlySavingsSchema(Schema): # GET, POST, PUT request
     id = fields.Str(dump_only=True)
-    saving_plan_id = fields.Str(required=True)
     month = fields.Str(required=True)
     amount_saved = fields.Float(required=True)
+    saving_plan_id = fields.Int(required=True, load_only=True)
 
 class MonthlySavingsUpdateSchema(Schema): # PUT request
+    id = fields.Str(required=True)
     amount_saved = fields.Float(required=True)
 
 
@@ -20,7 +21,7 @@ class SavingPlansSchema(Schema): # GET, POST, PUT request
     start_date = fields.Str(required=True)
     end_date = fields.Str(required=True)
     starting_capital = fields.Float(required=True)
-    # savings_per_month = fields.Str(required=True) relationship todo!!1
+    monthly_savings_list = fields.List(fields.Nested(MonthlySavingsSchema()), dump_only=True)
 
 class SavingPlansUpdateSchema(Schema):  # PUT request
     target_title = fields.Str()
