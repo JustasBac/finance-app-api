@@ -8,7 +8,7 @@ class MonthlySavingsSchema(Schema): # GET, POST, PUT request
     saving_plan_id = fields.Int(required=True, load_only=True)
 
 class MonthlySavingsUpdateSchema(Schema): # PUT request
-    id = fields.Str(required=True)
+    id = fields.Str(dump_only=True)
     amount_saved = fields.Float(required=True)
 
 
@@ -30,4 +30,9 @@ class SavingPlansUpdateSchema(Schema):  # PUT request
     start_date = fields.Str()
     end_date = fields.Str()
     starting_capital = fields.Float()
+
+class UserSchema(Schema):
+    id = fields.Int(dump_only=True)
+    username = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
     

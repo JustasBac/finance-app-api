@@ -1,8 +1,7 @@
-import uuid
-from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from flask_jwt_extended import jwt_required
 
 from db import db
 from models import MonthlySavingsModel
@@ -13,11 +12,13 @@ blp = Blueprint("Monthly savings", __name__, description="List of monthly saving
 
 @blp.route("/monthly_savings")
 class MonthlySavings(MethodView):
+    @jwt_required()
     @blp.response(200, MonthlySavingsSchema(many=True))
     def get(self):
         return MonthlySavingsModel.query.all()
 
 
+    @jwt_required()
     @blp.arguments(MonthlySavingsSchema)
     @blp.response(201, MonthlySavingsSchema)
     def post(self, savings_data):
@@ -35,10 +36,22 @@ class MonthlySavings(MethodView):
 
     
 
-@blp.route("/monthly_savings/<string:month_savings_id>")
+@blp.route("/monthly_savings/<int:month_savings_id>")
 class MonthlySavingsById(MethodView):
+    @jwt_required()  
     @blp.arguments(MonthlySavingsUpdateSchema)
     @blp.response(200, MonthlySavingsSchema)
-    def put(self, savings_data, month_savings_id):
+    def put(self, incoming_data, month_savings_id):
         month_savings = MonthlySavingsModel.query.get_or_404(month_savings_id)
-        raise NotImplementedError("not implemneted yet")
+
+        if month_savings:
+            month_savings.amount_saved = incoming_data["amount_saved"]
+           
+        else:
+            abort(404, message="Month data with such ID was not found")
+
+
+        db.session.add(month_savings)
+        db.session.commit()
+
+        return month_savings

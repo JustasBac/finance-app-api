@@ -1,8 +1,7 @@
-import uuid
-from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
+from flask_jwt_extended import jwt_required
 
 from db import db
 from models import SavingPlansModel
@@ -12,10 +11,12 @@ blp = Blueprint("Saving plans", __name__, description="List of Saving Plans")
 
 @blp.route("/saving_plans")
 class SavingPlans(MethodView):
+    @jwt_required()
     @blp.response(200, SavingPlansSchema(many=True))
     def get(self):
         return SavingPlansModel.query.all()
     
+    @jwt_required()    
     @blp.arguments(SavingPlansSchema)
     @blp.response(201, SavingPlansSchema)
     def post(self, saving_plan_data):
@@ -31,8 +32,9 @@ class SavingPlans(MethodView):
 
    
 
-@blp.route("/saving_plan/<string:saving_plan_id>")
+@blp.route("/saving_plan/<int:saving_plan_id>")
 class SavingPlanById(MethodView):
+    @jwt_required()  
     @blp.arguments(SavingPlansUpdateSchema)
     @blp.response(200, SavingPlansSchema)
     def put(self, saving_plan_data, saving_plan_id):
@@ -53,6 +55,7 @@ class SavingPlanById(MethodView):
 
         return saving_plan
 
+    @jwt_required()  
     def delete(self, saving_plan_id):
         saving_plan = SavingPlansModel.query.get_or_404(saving_plan_id)
         
