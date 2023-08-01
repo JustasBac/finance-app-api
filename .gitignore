@@ -1,2 +1,7 @@
 .flaskenv
 .venv
+.vscode
+__pycache__
+instance/data.db
+*.pyc
+.DS_Store

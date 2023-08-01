@@ -3,6 +3,7 @@ import os
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 
 from db import db
 import models
@@ -23,8 +24,9 @@ def create_app(db_url=None):
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL","sqlite:///data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+   
     db.init_app(app)
-
+    migrate = Migrate(app, db)
     api = Api(app)
 
 
@@ -73,6 +75,8 @@ def create_app(db_url=None):
 
 # DEV: docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-app-api
 # PRODUCTION: docker run -dp 5000:5000 finance-app-api
+
+
    
 
 
