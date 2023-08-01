@@ -1,9 +1,11 @@
 import os
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
 from db import db
 import models
@@ -14,6 +16,8 @@ from resources.user import blp as UserBlueprint
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    CORS(app)
+    load_dotenv()
 
     app.config['PROPAGATE_EXCEPTIONS'] = True
     app.config["API_TITLE"] = "Finance app API"
@@ -74,6 +78,8 @@ def create_app(db_url=None):
     return app
 
 # DEV: docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-app-api
+# docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-app-api sh -c "flask run --host 0.0.0.0"
+
 # PRODUCTION: docker run -dp 5000:5000 finance-app-api
 
 
