@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from db import db
 from models import SavingPlansModel
@@ -15,13 +15,16 @@ class SavingPlans(MethodView):
     @jwt_required()
     @blp.response(200, SavingPlansSchema(many=True))
     def get(self):
-        return SavingPlansModel.query.all()
+        uid = get_jwt_identity()
+
+        return SavingPlansModel.query.filter(SavingPlansModel.created_by_id == uid)
 
     @jwt_required()
     @blp.arguments(SavingPlansSchema)
     @blp.response(201, SavingPlansSchema)
     def post(self, saving_plan_data):
         new_saving_plan = SavingPlansModel(**saving_plan_data)
+        new_saving_plan.created_by_id = get_jwt_identity()
 
         try:
             db.session.add(new_saving_plan)
@@ -39,6 +42,11 @@ class SavingPlanById(MethodView):
     @blp.response(200, SavingPlansSchema)
     def put(self, saving_plan_data, saving_plan_id):
         saving_plan = SavingPlansModel.query.get_or_404(saving_plan_id)
+
+        uid = get_jwt_identity()
+
+        if saving_plan.created_by_id != uid:
+            abort(403, message="No permission")
 
         if saving_plan:
             saving_plan.target_title = saving_plan_data["target_title"]
@@ -58,6 +66,11 @@ class SavingPlanById(MethodView):
     @jwt_required()
     def delete(self, saving_plan_id):
         saving_plan = SavingPlansModel.query.get_or_404(saving_plan_id)
+
+        uid = get_jwt_identity()
+
+        if saving_plan.created_by_id != uid:
+            abort(403, message="No permission")
 
         db.session.delete(saving_plan)
         db.session.commit()
