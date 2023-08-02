@@ -14,9 +14,9 @@ from resources.monthly_savings import blp as MonthlySavinsgBlueprint
 from resources.saving_plan import blp as SavingPlansBlueprint
 from resources.user import blp as UserBlueprint
 
+
 def create_app(db_url=None):
     app = Flask(__name__)
-    CORS(app)
     load_dotenv()
 
     app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -26,23 +26,23 @@ def create_app(db_url=None):
     app.config["OPENAPI_URL_PREFIX"] = "/"
     app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL","sqlite:///data.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv(
+        "DATABASE_URL", "sqlite:///data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-   
+
     db.init_app(app)
     migrate = Migrate(app, db)
     api = Api(app)
 
-
     app.config["JWT_SECRET_KEY"] = "144209903379925348535378939497287677465"
     jwt = JWTManager(app)
-
-  
+    CORS(app)
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
         return (
-            jsonify({"message": "The token has expired.", "error": "token_expired"}),
+            jsonify({"message": "The token has expired.",
+                    "error": "token_expired"}),
             401,
         )
 
@@ -67,8 +67,7 @@ def create_app(db_url=None):
             401,
         )
 
-
-    with app.app_context(): #create all tables
+    with app.app_context():  # create all tables
         db.create_all()
 
     api.register_blueprint(MonthlySavinsgBlueprint)
@@ -81,9 +80,3 @@ def create_app(db_url=None):
 # docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-app-api sh -c "flask run --host 0.0.0.0"
 
 # PRODUCTION: docker run -dp 5000:5000 finance-app-api
-
-
-   
-
-
-
