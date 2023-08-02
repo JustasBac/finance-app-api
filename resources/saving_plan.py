@@ -9,14 +9,15 @@ from schemas import SavingPlansSchema, SavingPlansUpdateSchema
 
 blp = Blueprint("Saving plans", __name__, description="List of Saving Plans")
 
+
 @blp.route("/saving_plans")
 class SavingPlans(MethodView):
     @jwt_required()
     @blp.response(200, SavingPlansSchema(many=True))
     def get(self):
         return SavingPlansModel.query.all()
-    
-    @jwt_required()    
+
+    @jwt_required()
     @blp.arguments(SavingPlansSchema)
     @blp.response(201, SavingPlansSchema)
     def post(self, saving_plan_data):
@@ -30,11 +31,10 @@ class SavingPlans(MethodView):
 
         return new_saving_plan
 
-   
 
 @blp.route("/saving_plan/<int:saving_plan_id>")
 class SavingPlanById(MethodView):
-    @jwt_required()  
+    @jwt_required()
     @blp.arguments(SavingPlansUpdateSchema)
     @blp.response(200, SavingPlansSchema)
     def put(self, saving_plan_data, saving_plan_id):
@@ -55,11 +55,11 @@ class SavingPlanById(MethodView):
 
         return saving_plan
 
-    @jwt_required()  
+    @jwt_required()
     def delete(self, saving_plan_id):
         saving_plan = SavingPlansModel.query.get_or_404(saving_plan_id)
-        
+
         db.session.delete(saving_plan)
         db.session.commit()
 
-        return {"message": "Saving Plan deleted"}
+        return {"message": "Saving Plan deleted", "ok": True}
