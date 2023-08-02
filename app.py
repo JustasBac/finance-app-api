@@ -17,6 +17,7 @@ from resources.user import blp as UserBlueprint
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    CORS(app)
     load_dotenv()
 
     app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -29,6 +30,7 @@ def create_app(db_url=None):
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv(
         "DATABASE_URL", "sqlite:///data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
     db.init_app(app)
     migrate = Migrate(app, db)
@@ -36,7 +38,6 @@ def create_app(db_url=None):
 
     app.config["JWT_SECRET_KEY"] = "144209903379925348535378939497287677465"
     jwt = JWTManager(app)
-    CORS(app)
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):

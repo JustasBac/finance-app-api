@@ -59,6 +59,7 @@ class MonthlySavingsById(MethodView):
 
         if month_savings.created_by_id != uid:
             abort(403, message="No permission")
+        # TODO: fix
 
         if month_savings:
             month_savings.amount_saved = incoming_data["amount_saved"]
@@ -70,3 +71,12 @@ class MonthlySavingsById(MethodView):
         db.session.commit()
 
         return month_savings
+
+    # @jwt_required()
+    # def delete(self, month_savings_id):
+    #     month_savings = MonthlySavingsModel.query.get_or_404(month_savings_id)
+
+    #     db.session.delete(month_savings)
+    #     db.session.commit()
+
+    #     return {"message": "month_savings deleted", "ok": True}
