@@ -36,6 +36,8 @@ class MonthlySavings(MethodView):
         if related_saving_plan.created_by_id != uid:
             abort(403, message="No permission")
 
+        new_month_savings.created_by_id = uid
+
         try:
             db.session.add(new_month_savings)
             db.session.commit()
@@ -59,13 +61,8 @@ class MonthlySavingsById(MethodView):
 
         if month_savings.created_by_id != uid:
             abort(403, message="No permission")
-        # TODO: fix
 
-        if month_savings:
-            month_savings.amount_saved = incoming_data["amount_saved"]
-
-        else:
-            abort(404, message="Month data with such ID was not found")
+        month_savings.amount_saved = incoming_data["amount_saved"]
 
         db.session.add(month_savings)
         db.session.commit()

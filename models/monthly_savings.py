@@ -12,3 +12,4 @@ class MonthlySavingsModel(db.Model):
         "saving_plans.id"), unique=False, nullable=False)
     saving_plan = db.relationship(
         "SavingPlansModel", back_populates="monthly_savings_list")
+    created_by_id = db.Column(db.Integer, db.ForeignKey("users.id"))
