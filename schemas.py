@@ -36,8 +36,35 @@ class SavingPlansUpdateSchema(Schema):  # PUT request
     end_date = fields.Str()
     starting_capital = fields.Float()
 
+# ----------------------------- User
+
 
 class UserSchema(Schema):
     id = fields.Int(dump_only=True)
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
+
+
+# ----------------------------- Finance Overview
+# used for: Income, Spendings and TotalBalance
+class FinanceParameterSchema(Schema):
+    id = fields.Str(dump_only=True)
+    month = fields.Str(required=True)
+    value = fields.Float(required=True)
+    currency_code = fields.Str(required=True)
+
+
+class FinanceParameterUpdateSchema(Schema):
+    id = fields.Str(dump_only=True)
+    value = fields.Float(required=True)
+    currency_code = fields.Str(required=True)
+
+
+class FinanceSchema(Schema):
+    id = fields.Str(dump_only=True)
+    income_list = fields.List(
+        fields.Nested(FinanceParameterSchema()), dump_only=True)
+    spendings_list = fields.List(
+        fields.Nested(FinanceParameterSchema()), dump_only=True)
+    total_balance_list = fields.List(
+        fields.Nested(FinanceParameterSchema()), dump_only=True)

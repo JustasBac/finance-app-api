@@ -10,9 +10,10 @@ from dotenv import load_dotenv
 from db import db
 import models
 
-from resources.monthly_savings import blp as MonthlySavinsgBlueprint
-from resources.saving_plan import blp as SavingPlansBlueprint
-from resources.user import blp as UserBlueprint
+from resources.saving_plans.monthly_savings import blp as MonthlySavinsgBlueprint
+from resources.saving_plans.saving_plan import blp as SavingPlansBlueprint
+from resources.users.user import blp as UserBlueprint
+from resources.finance_overview.finance_overview import blp as FinanceOverviewBlueprint
 
 
 def create_app(db_url=None):
@@ -74,6 +75,7 @@ def create_app(db_url=None):
     api.register_blueprint(MonthlySavinsgBlueprint)
     api.register_blueprint(SavingPlansBlueprint)
     api.register_blueprint(UserBlueprint)
+    api.register_blueprint(FinanceOverviewBlueprint)
 
     return app
 
