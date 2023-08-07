@@ -8,6 +8,4 @@ from models.saving_plans.relations.monthly_savings import MonthlySavingsModel
 
 
 # finance overview
-from models.finances.income import IncomeModel
-from models.finances.spendings import SpendingsModel
-from models.finances.total_balance import TotalBalanceModel
+from models.finance_monthly_data import FinanceDataModel
