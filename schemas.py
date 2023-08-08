@@ -45,6 +45,11 @@ class UserSchema(Schema):
     password = fields.Str(required=True, load_only=True)
 
 
+class UserSchemaWithCurrency(Schema):
+    app_currency_code = fields.Str(required=True)
+    username = fields.Str(dump_only=True)
+
+
 # ----------------------------- Finance Overview
 # used for: Income, Spendings and TotalBalance
 class FinanceSchema(Schema):

@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jw
 
 from db import db
 from models import UserModel
-from schemas import UserSchema
+from schemas import UserSchema, UserSchemaWithCurrency
 
 blp = Blueprint("Users", __name__, description="List of users")
 
@@ -44,6 +44,8 @@ class UserRegister(MethodView):
         new_user = UserModel(
             username=user_data["username"], password=pbkdf2_sha256.hash(user_data["password"]))
 
+        new_user.app_currency_code = "EUR"  # default
+
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -65,3 +67,28 @@ class User(MethodView):
         db.session.delete(user)
         db.session.commit()
         return {"message": "User successfully deleted"}, 200
+
+
+@blp.route("/app_currency")
+class Currency(MethodView):
+    @jwt_required()
+    @blp.response(200, UserSchemaWithCurrency)
+    def get(self):
+        uid = get_jwt_identity()
+
+        return UserModel.query.get_or_404(uid)
+
+    @jwt_required()
+    @blp.arguments(UserSchemaWithCurrency)
+    @blp.response(200, UserSchemaWithCurrency)
+    def put(self, currency_data):
+        uid = get_jwt_identity()
+
+        user_data = UserModel.query.get_or_404(uid)
+
+        user_data.app_currency_code = currency_data['app_currency_code']
+
+        db.session.add(user_data)
+        db.session.commit()
+
+        return user_data
