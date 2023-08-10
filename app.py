@@ -79,7 +79,6 @@ def create_app(db_url=None):
 
     return app
 
-# DEV: docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-app-api
 # docker run -p 5000:5000 -w /app -v "$(pwd):/app" finance-app-api sh -c "flask run --host 0.0.0.0"
 
 # PRODUCTION: docker run -dp 5000:5000 finance-app-api

@@ -52,7 +52,7 @@ class UserRegister(MethodView):
         except IntegrityError:
             abort(400, message="Such username already exists")
 
-        return {"message": "User successfully created"}, 201
+        return {"message": "User successfully created", "ok": True}, 201
 
 
 @blp.route("/user/<int:user_id>")
