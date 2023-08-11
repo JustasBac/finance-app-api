@@ -50,6 +50,10 @@ class UserSchemaWithCurrency(Schema):
     username = fields.Str(dump_only=True)
 
 
+class UserSchemaWitTotalBalance(Schema):
+    total_balance = fields.Float(allow_none=True)
+
+
 # ----------------------------- Finance Overview
 # used for: Income, Spendings and TotalBalance
 class FinanceSchema(Schema):
@@ -58,4 +62,3 @@ class FinanceSchema(Schema):
     currency_code = fields.Str(required=True)
     income = fields.Float(allow_none=True)
     spendings = fields.Float(allow_none=True)
-    total_balance = fields.Float(allow_none=True)

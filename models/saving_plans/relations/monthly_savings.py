@@ -6,7 +6,7 @@ class MonthlySavingsModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     # month has to be unique and not null
-    month = db.Column(db.String(80), unique=True, nullable=False)
+    month = db.Column(db.String(80), unique=False, nullable=False)
     amount_saved = db.Column(db.Float, unique=False, nullable=False)
     saving_plan_id = db.Column(db.Integer, db.ForeignKey(
         "saving_plans.id"), unique=False, nullable=False)

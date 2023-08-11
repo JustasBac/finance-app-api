@@ -8,3 +8,4 @@ class UserModel(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     app_currency_code = db.Column(db.String(5), unique=False, nullable=True)
+    total_balance = db.Column(db.Float, unique=False, nullable=True)

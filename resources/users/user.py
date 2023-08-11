@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jw
 
 from db import db
 from models import UserModel
-from schemas import UserSchema, UserSchemaWithCurrency
+from schemas import UserSchema, UserSchemaWithCurrency, UserSchemaWitTotalBalance
 
 blp = Blueprint("Users", __name__, description="List of users")
 
@@ -87,6 +87,31 @@ class Currency(MethodView):
         user_data = UserModel.query.get_or_404(uid)
 
         user_data.app_currency_code = currency_data['app_currency_code']
+
+        db.session.add(user_data)
+        db.session.commit()
+
+        return user_data
+
+
+@blp.route("/user_total_balance")
+class TotalBalance(MethodView):
+    @jwt_required()
+    @blp.response(200, UserSchemaWitTotalBalance)
+    def get(self):
+        uid = get_jwt_identity()
+
+        return UserModel.query.get_or_404(uid)
+
+    @jwt_required()
+    @blp.arguments(UserSchemaWitTotalBalance)
+    @blp.response(200, UserSchemaWitTotalBalance)
+    def put(self, incoming_data):
+        uid = get_jwt_identity()
+
+        user_data = UserModel.query.get_or_404(uid)
+
+        user_data.total_balance = incoming_data['total_balance']
 
         db.session.add(user_data)
         db.session.commit()
