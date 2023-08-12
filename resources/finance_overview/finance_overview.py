@@ -61,7 +61,7 @@ class MonthlySavingsById(MethodView):
         data_entry.currency_code = finance_data["currency_code"]
         data_entry.income = finance_data["income"]
         data_entry.spendings = finance_data["spendings"]
-        data_entry.total_balance = finance_data["total_balance"]
+        data_entry.updated_total_balance = finance_data["updated_total_balance"]
 
         db.session.add(data_entry)
         db.session.commit()
@@ -89,7 +89,7 @@ class MonthlySavingsById(MethodView):
         # just delete values of the entry
         data_entry.income = None
         data_entry.spendings = None
-        data_entry.total_balance = None
+        data_entry.updated_total_balance = None
 
         db.session.add(data_entry)
         db.session.commit()

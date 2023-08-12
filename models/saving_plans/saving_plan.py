@@ -14,3 +14,5 @@ class SavingPlansModel(db.Model):
     monthly_savings_list = db.relationship(
         "MonthlySavingsModel", back_populates="saving_plan", cascade="all, delete")
     created_by_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship(
+        "UserModel", back_populates="saving_plans")

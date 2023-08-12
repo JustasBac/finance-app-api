@@ -62,3 +62,5 @@ class FinanceSchema(Schema):
     currency_code = fields.Str(required=True)
     income = fields.Float(allow_none=True)
     spendings = fields.Float(allow_none=True)
+    initial_total_balance = fields.Float(allow_none=True)
+    updated_total_balance = fields.Float(allow_none=True)
