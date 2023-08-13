@@ -94,7 +94,7 @@ class Currency(MethodView):
         return user_data
 
 
-@blp.route("/user_total_balance")
+@blp.route("/user_initial_total_balance")
 class TotalBalance(MethodView):
     @jwt_required()
     @blp.response(200, UserSchemaWitTotalBalance)
@@ -111,7 +111,7 @@ class TotalBalance(MethodView):
 
         user_data = UserModel.query.get_or_404(uid)
 
-        user_data.total_balance = incoming_data['total_balance']
+        user_data.initial_total_balance = incoming_data['initial_total_balance']
 
         db.session.add(user_data)
         db.session.commit()

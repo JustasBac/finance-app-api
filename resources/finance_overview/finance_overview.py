@@ -7,6 +7,7 @@ from flask import request
 from db import db
 from models import FinanceDataModel
 from schemas import FinanceSchema
+from sqlalchemy import desc
 
 blp = Blueprint("Finance overview data", __name__,
                 description="List of Finance Data by month (income, spendings total-balance)")
@@ -18,7 +19,7 @@ class FinanceData(MethodView):
     @blp.response(200, FinanceSchema(many=True))
     def get(self):
         uid = get_jwt_identity()
-
+        # .order_by(desc(FinanceDataModel.month))
         return FinanceDataModel.query.filter(FinanceDataModel.created_by_id == uid)
 
 
@@ -89,7 +90,7 @@ class MonthlySavingsById(MethodView):
         # just delete values of the entry
         data_entry.income = None
         data_entry.spendings = None
-        data_entry.updated_total_balance = None
+        data_entry.updated_total_balance = data_entry.initial_total_balance
 
         db.session.add(data_entry)
         db.session.commit()
