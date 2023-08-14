@@ -17,7 +17,7 @@ class SavingPlans(MethodView):
     def get(self):
         uid = get_jwt_identity()
 
-        return SavingPlansModel.query.filter(SavingPlansModel.created_by_id == uid)
+        return SavingPlansModel.query.filter(SavingPlansModel.created_by_id == uid).order_by(SavingPlansModel.start_date)
 
     @jwt_required()
     @blp.arguments(SavingPlansSchema)

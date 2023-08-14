@@ -19,8 +19,8 @@ class FinanceData(MethodView):
     @blp.response(200, FinanceSchema(many=True))
     def get(self):
         uid = get_jwt_identity()
-        # .order_by(desc(FinanceDataModel.month))
-        return FinanceDataModel.query.filter(FinanceDataModel.created_by_id == uid)
+
+        return FinanceDataModel.query.filter(FinanceDataModel.created_by_id == uid).order_by(FinanceDataModel.datetime)
 
 
 @blp.route("/finance_data")
