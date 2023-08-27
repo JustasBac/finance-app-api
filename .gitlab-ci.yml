@@ -1,0 +1,32 @@
+image: docker:git
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+
+stages:
+  - build
+
+build:
+  stage: build
+  before_script:
+    - export MAJOR_TAG="0"
+    - export MINOR_TAG="0.5"
+    - export FULL_TAG=$(git describe --tags --abbrev=0)
+    - export NAME_VERSION=${CI_REGISTRY_IMAGE}:$FULL_TAG
+    - export NAME_MAJOR=${CI_REGISTRY_IMAGE}:$MAJOR_TAG
+    - export NAME_MINOR=${CI_REGISTRY_IMAGE}:$MINOR_TAG
+    - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
+  script:
+    - docker build -f docker/Dockerfile -t $NAME_VERSION -t $NAME_MAJOR -t $NAME_MINOR .
+    - docker push $NAME_MAJOR
+    - docker push $NAME_MINOR
+    - docker push $NAME_VERSION
+    - docker rmi -f $NAME_MAJOR
+    - docker rmi -f $NAME_MINOR
+    - docker rmi -f $NAME_VERSION
+  only:
+    refs:
+      - tags
