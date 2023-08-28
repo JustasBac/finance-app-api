@@ -20,7 +20,7 @@ build:
     - export NAME_MINOR=${CI_REGISTRY_IMAGE}:$MINOR_TAG
     - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
   script:
-    - docker build -f docker/Dockerfile -t $NAME_VERSION -t $NAME_MAJOR -t $NAME_MINOR .
+    - docker build -f Dockerfile -t $NAME_VERSION -t $NAME_MAJOR -t $NAME_MINOR .
     - docker push $NAME_MAJOR
     - docker push $NAME_MINOR
     - docker push $NAME_VERSION
