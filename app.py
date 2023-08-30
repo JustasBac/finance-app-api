@@ -73,10 +73,10 @@ def create_app(db_url=None):
     with app.app_context():  # create all tables
         db.create_all()
 
-    api.register_blueprint(MonthlySavinsgBlueprint)
-    api.register_blueprint(SavingPlansBlueprint)
-    api.register_blueprint(UserBlueprint)
-    api.register_blueprint(FinanceOverviewBlueprint)
+    api.register_blueprint(MonthlySavinsgBlueprint, url_prefix='/api/v1')
+    api.register_blueprint(SavingPlansBlueprint, url_prefix='/api/v1')
+    api.register_blueprint(UserBlueprint, url_prefix='/api/v1')
+    api.register_blueprint(FinanceOverviewBlueprint, url_prefix='/api/v1')
 
     return app
 
