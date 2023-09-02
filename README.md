@@ -23,15 +23,24 @@ This API app provides backend support for the Finance UI application. It uses SQ
 
 1. Clone this repository
 2. Create a virtual environment and activate it:
-   `python3 -m venv .venv source ./venv/bin/activate`
+   ```bash
+   python3 -m venv .venv
+   source ./venv/bin/activate
+   ```
 3. Install the required dependencies:
-   `pip install -r requirements.txt`
+   ```bash
+   pip install -r requirements.txt
+   ```
 4. Build and start Docker containers:
-   `docker compose build docker compose up`
+   ```bash
+   docker compose build docker compose up
+   ```
 5. Perform the initial database setup and migrations:
-   `flask db init`
-   `flask db migrate`
-   `flask db upgrade`
+   ```bash
+   flask db init
+   flask db migrate
+   flask db upgrade
+   ```
 
 ## Usage
 
@@ -39,7 +48,9 @@ This API app provides backend support for the Finance UI application. It uses SQ
 
 To run the Finance-UI REST API, use the following command (in virtual environment):
 
-`flask run`
+```bash
+flask run
+```
 
 This will start the API server, and it will be accessible at `http://localhost:5000/api/v1`.
 
@@ -51,8 +62,12 @@ Once the flask server is running you can access the documentation at `http://loc
 
 We use Alembic for database migrations. To generate a new migration, run:
 
-`flask db migrate -m "Your migration message"`
+```bash
+flask db migrate -m "Your migration message"
+```
 
 To apply the migrations, use:
 
-`flask db upgrade`
+```bash
+flask db upgrade
+```
