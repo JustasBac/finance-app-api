@@ -7,8 +7,8 @@ services:
       - ./export:/export
       - postgres_data:/data/db
     environment:
-      - POSTGRES_USER=justasb
-      - POSTGRES_PASSWORD=bace
+      - POSTGRES_USER=justas
+      - POSTGRES_PASSWORD=bac
       - POSTGRES_DB=finance_app_data
     ports:
       - 5432:5432

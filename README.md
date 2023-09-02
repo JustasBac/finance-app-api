@@ -43,6 +43,14 @@ This API app provides backend support for the Finance UI application. It uses SQ
    flask db upgrade
    ```
 
+## Configuration (ENV variables)
+
+Make sure to configure environment variables:
+
+```bash
+cp .env.dist .env
+```
+
 ## Usage
 
 ### Running the API
