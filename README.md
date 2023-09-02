@@ -25,7 +25,7 @@ This API app provides backend support for the Finance UI application. It uses SQ
 2. Create a virtual environment and activate it:
    ```bash
    python3 -m venv .venv
-   source ./venv/bin/activate
+   source .venv/bin/activate
    ```
 3. Install the required dependencies:
    ```bash
@@ -33,7 +33,8 @@ This API app provides backend support for the Finance UI application. It uses SQ
    ```
 4. Build and start Docker containers:
    ```bash
-   docker compose build docker compose up
+   docker compose build
+   docker compose up
    ```
 5. Perform the initial database setup and migrations:
    ```bash
